@@ -1,0 +1,125 @@
+-- Adminer 4.7.1 MySQL dump
+
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+DELIMITER ;;
+
+DROP PROCEDURE IF EXISTS `games_load`;;
+CREATE PROCEDURE `games_load`()
+INSERT INTO games (game_name) VALUES ('casita robada'), ('dominó'), ('fallout 4');;
+
+DROP PROCEDURE IF EXISTS `join1`;;
+CREATE PROCEDURE `join1`()
+SELECT
+users.username, 
+games.game_name
+
+FROM users
+INNER JOIN games_users ON users.id_user = games_users.user_id
+INNER JOIN games ON games_users.game_id = games.id_game;;
+
+DROP PROCEDURE IF EXISTS `join_left`;;
+CREATE PROCEDURE `join_left`()
+SELECT
+users.username, 
+games.game_name
+
+FROM users
+LEFT JOIN games_users ON users.id_user = games_users.user_id
+LEFT JOIN games ON games_users.game_id = games.id_game;;
+
+DROP PROCEDURE IF EXISTS `join_outer`;;
+CREATE PROCEDURE `join_outer`()
+SELECT
+users.username, 
+games.game_name
+FROM
+users
+LEFT JOIN games_users ON users.id_user = games_users.user_id
+LEFT JOIN games ON games_users.game_id = games.id_game
+
+UNION
+
+SELECT
+users.username, 
+games.game_name
+FROM 
+users
+RIGHT JOIN games_users ON users.id_user = games_users.user_id
+RIGHT JOIN games ON games_users.game_id = games.id_game;;
+
+DROP PROCEDURE IF EXISTS `join_right`;;
+CREATE PROCEDURE `join_right`()
+SELECT
+users.username, 
+games.game_name
+
+FROM users
+RIGHT JOIN games_users ON users.id_user = games_users.user_id
+RIGHT JOIN games ON games_users.game_id = games.id_game;;
+
+DROP PROCEDURE IF EXISTS `usersgames_load`;;
+CREATE PROCEDURE `usersgames_load`()
+INSERT INTO games_users  VALUES ('1','1'), ('1','3'), ('2','1'), ('2','2'), ('2','5'), ('3','1'), ('4','2'),('4','3');;
+
+DROP PROCEDURE IF EXISTS `users_load`;;
+CREATE PROCEDURE `users_load`()
+INSERT INTO users (username) VALUES ('amanda'), ('marina'), ('ernesto');;
+
+DELIMITER ;
+
+DROP TABLE IF EXISTS `games`;
+CREATE TABLE `games` (
+  `id_game` int(11) NOT NULL AUTO_INCREMENT,
+  `game_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id_game`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `games` (`id_game`, `game_name`) VALUES
+(1,	'Final fantasy VII'),
+(2,	'Zelda: A link to the past'),
+(3,	'Crazy taxy'),
+(4,	'sudoku'),
+(6,	'casita robada'),
+(7,	'dominó'),
+(8,	'fallout 4');
+
+DROP TABLE IF EXISTS `games_users`;
+CREATE TABLE `games_users` (
+  `game_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  KEY `game_id` (`game_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `games_users` (`game_id`, `user_id`) VALUES
+(1,	1),
+(1,	2),
+(1,	3),
+(1,	4),
+(1,	5),
+(1,	7),
+(2,	3),
+(2,	7),
+(4,	1),
+(4,	2),
+(4,	4),
+(4,	7);
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id_user` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `users` (`id_user`, `username`) VALUES
+(1,	'santiago'),
+(2,	'amanda'),
+(3,	'marina'),
+(4,	'ernesto');
+
+-- 2021-09-09 20:41:21
